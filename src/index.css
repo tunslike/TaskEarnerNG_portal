@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #f5f6f6;
+}
+
+.nav-link {
+  @apply cursor-pointer hover:text-[#fa501b] hover:shadow-sm hover:bg-[#fff] hover:px-4 hover:py-2 px-4 py-2 hover:rounded-[1rem] text-[0.83rem] font-[400] text-primaryBlue;
+}
+
+.account-box {
+  @apply  w-[300px] p-5 h-[150px] rounded-[1.3rem];
+}
+
+.account-btn {
+  @apply  text-white font-[400] text-[0.7rem] py-2 px-5 rounded-[0.8rem];
+}
+
+.display-box {
+  @apply bg-[#fff] w-full rounded-[2rem] min-h-[150px] p-5 px-7 shadow-sm;
+}
+
+.inner-display-box {
+  @apply bg-[#fff] w-[90%] mx-auto rounded-[1rem] p-7 px-7 shadow-sm  mt-[85px] flex items-center justify-between;
+}
+
+.inner-body {
+  @apply bg-[#fff] mx-auto pt-7 w-[90%] shadow-sm rounded-[1rem] mt-6;
+}
+
+.inner-body h4 {
+  @apply text-[0.83rem] ml-3 text-[#4d4e50] font-[500];
+}
+
+
+.tool-tip-text {
+  @apply text-[0.7rem] mt-9 px-2 rounded-md bg-[#f5f5f5] h-[18px] text-primaryOrange cursor-pointer;
+}
+
+.bd-crumb {
+  @apply inline-flex gap-2 text-[0.8rem];
+}
+
+.bd-crumb li {
+  @apply bg-[#f3f3f3] px-4 py-1 rounded-[1rem] text-primaryOrange
+}
+
+.inner-display-box h1 {
+  @apply font-[500] text-[1.3rem];
+}
+
+.inner-display-box p {
+  @apply text-[0.8rem] text-[#928d8d] w-[70%] mt-2
+}
+
+.display-box h1 {
+  @apply text-[1.8rem] font-[500] text-[#2b2a2a]
+}
+
+.display-box h4 {
+  @apply text-[0.85rem] text-[#7b7a7a]
+}
+
+.advertBox {
+  @apply bg-white w-full rounded-[1rem] p-5 shadow-sm 
+}
+
+.advertBox h1 {
+  @apply font-[500] text-[1rem] text-primaryBlue mb-3
+}
+
+.advertBox p {
+  @apply font-[400] w-[340px] text-[0.8rem] text-[#a6a7b0] text-left
+}
+
+.advert-details {
+  @apply flex items-center justify-between gap-5;
+}
+
+.advert-details-link {
+  @apply border hover:bg-primaryOrange hover:text-white border-primaryOrange text-primaryOrange text-[0.8rem] px-7 py-[0.4rem] rounded-[1rem]
+}
+
+.task-body {
+  @apply m-1;
+}
+
+.task-body h1 {
+  @apply font-[600] text-[1.20rem] mb-3 mt-4 text-[#1e1e1e];
+}
+
+.all-tasks h1 {
+  @apply font-[600] text-[1.20rem] mb-3 mt-4 text-[#1e1e1e];
+}
+
+.task-body a {
+  @apply text-primaryOrange bg-white rounded-[0.8rem] mb-2 shadow-sm px-4 py-1 text-[0.8rem] font-[500] mr-3 cursor-pointer flex items-center gap-2;
+}
+
+.task-body h6 {
+  @apply text-[0.7rem] text-[#0582ff] border border-[#0582ff] px-3 py-[2px] rounded-lg
+}
+
+.task-box {
+  @apply bg-white w-full rounded-[1.5rem] p-5 shadow-sm flex gap-8; 
+}
+
+.task-card {
+  @apply bg-white w-[520px] rounded-[1.5rem] pl-4 pb-4 shadow-sm flex justify-center cursor-pointer items-center gap-5 mb-4; 
+}
+
+.task-card img {
+  @apply w-[140px] rounded-[0.7rem];
+}
+
+.task-card h1 {
+  @apply text-copyrightBlue text-[1rem]
+}
+
+.task-card p {
+  @apply text-[0.8rem] text-[#b1b1b4];
+}
+
+.list-item-box {
+  @apply w-[240px] bg-[#f6f6f8] rounded-[1rem] shadow-md
+}
+
+.list-item-box h1 {
+  @apply text-copyrightBlue text-[1.1rem]
+}
+
+.list-item-box p {
+  @apply text-[0.8rem] text-[#bababf];
+}
+
+.list-item-box img {
+  @apply text-center rounded-tl-[1rem] rounded-tr-[1rem]
+}
+
+.platform-icon img {
+  @apply bg-[#f5f5f5] rounded-[2rem] p-3
+}
+
+.platform-icon {
+  @apply cursor-pointer;
+}
+
+.platform-icon h3 {
+  @apply font-[500] text-[0.8rem] text-center pt-3;
+}
+
+.form-input {
+  @apply w-[60%] text-primaryBlue placeholder-[#a6a6a6] outline outline-[#e4e4e4] rounded-[0.7rem] my-2 p-3 text-[0.87rem];
+}
+
+.cal-area-btn {
+  @apply bg-[#ededed] p-5 mt-10 rounded-br-[1rem] rounded-bl-[1rem] flex justify-between items-center;
+}
+
+.cal-area-btn h6 {
+  @apply font-[500] text-[1rem]
+}
+
+.cal-area-btn h1 {
+  @apply font-[500] text-[1.5rem] text-copyrightBlue;
+}
+
+.cal-area-btn button {
+  @apply bg-primaryOrange hover:bg-[#ce3a0d] text-white px-7 py-3 text-[0.80rem] rounded-[2rem]
+}
+
