@@ -6,8 +6,16 @@ import Referrals from './Referrals';
 import SellOut from './SellOut';
 import Support from './Support';
 import CreateAdvert from "./CreateAdvert";
+import CreateEngagement from "./CreateEngagement";
+import CompleteTask from "./CompleteTask";
+import Login from "./Login";
+import Register from "./Register";
 
 export {
+    Login,
+    Register,
+    CreateEngagement,
+    CompleteTask,
     CreateAdvert,
     Dashboard,
     Advertise,

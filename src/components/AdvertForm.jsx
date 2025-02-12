@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import PlatformIcon from './PlatformIcon';
-import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip';
 
 

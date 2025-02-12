@@ -33,7 +33,7 @@ body {
 }
 
 .inner-display-box {
-  @apply bg-[#fff] w-[90%] mx-auto rounded-[1rem] p-7 px-7 shadow-sm  mt-[85px] flex items-center justify-between;
+  @apply bg-[#fff] w-[90%] mx-auto rounded-[1rem] p-7 px-7 shadow-sm flex items-center justify-between;
 }
 
 .inner-body {
@@ -42,6 +42,10 @@ body {
 
 .inner-body h4 {
   @apply text-[0.83rem] ml-3 text-[#4d4e50] font-[500];
+}
+
+.modal-inner-body h4 {
+  @apply text-[0.83rem] text-[#4d4e50] font-[500];
 }
 
 
@@ -134,7 +138,7 @@ body {
 }
 
 .list-item-box {
-  @apply w-[240px] bg-[#f6f6f8] rounded-[1rem] shadow-md
+  @apply w-[240px] bg-[#f6f6f8] rounded-[1rem] shadow-md cursor-pointer;
 }
 
 .list-item-box h1 {
@@ -150,6 +154,10 @@ body {
 }
 
 .platform-icon img {
+  @apply bg-[#f5f5f5] rounded-[2rem] p-3
+}
+
+.preview-platform-icon img {
   @apply bg-[#f5f5f5] rounded-[2rem] p-3
 }
 
@@ -178,6 +186,22 @@ body {
 }
 
 .cal-area-btn button {
-  @apply bg-primaryOrange hover:bg-[#ce3a0d] text-white px-7 py-3 text-[0.80rem] rounded-[2rem]
+  @apply bg-primaryOrange hover:bg-[#ce3a0d] transition text-white px-7 py-3 text-[0.80rem] rounded-[2rem]
 }
 
+
+.preview-details-box {
+  @apply bg-[#f9f9f9] w-full py-2 px-6 rounded-xl;
+}
+
+.preview-details-text {
+  @apply text-primaryOrange text-[0.85rem] font-[400];
+}
+
+.auth-form-box {
+  @apply flex items-center gap-x-3 border border-[#e4e4e4] rounded-[1rem] px-4 py-2 w-full;
+}
+
+.auth-form-box input {
+  @apply text-primaryBlue h-[40px] !outline-none placeholder-[#777777] w-full text-[0.85rem];
+}

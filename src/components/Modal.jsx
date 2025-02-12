@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 // Set app root for accessibility (required by react-modal)
 Modal.setAppElement('#root');
 
-const ModalComponent = () => {
+const ModalComponent = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Functions to open and close the modal
@@ -12,13 +12,14 @@ const ModalComponent = () => {
   const closeModal = () => setIsOpen(false);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div>
+    {/* 
       <button
         onClick={openModal}
         className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
       >
         Open Modal
-      </button>
+      </button> */}
 
       {/* Modal */}
       <Modal
@@ -44,6 +45,7 @@ const ModalComponent = () => {
           </button>
         </div>
       </Modal>
+    {/* Modal */}
     </div>
   );
 };

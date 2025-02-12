@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import { Header, Footer, BackButton, PlatformIcon } from '../components'
+import { Header, Footer, BackButton, EngagementItem, PlatformIcon } from '../components'
 import { FaPeopleGroup } from "react-icons/fa6";
+import { IoLogoWechat } from "react-icons/io5";
 import { RiErrorWarningLine } from "react-icons/ri";
 import { CgClose } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl";
@@ -8,7 +9,8 @@ import { Tooltip } from 'react-tooltip';
 import Modal from 'react-modal';
 import { fetchTaskTypes, postNewTask } from '../services/TasksService';
 
-const CreateAdvert = () => {
+const CreateEngagement = () => {
+  
 
     const [totalPrice, setTotalPrice] = useState(0.00);
     const [advertNo, setAdvertNo] = useState(1);
@@ -16,10 +18,11 @@ const CreateAdvert = () => {
     const [caption, setCaption] = useState('');
     const [adPrice, setAdPrice] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedTask, setSelectedTask] = useState(null);
     const [platformError, setPlatformError] = useState(false);
     const [files, setFiles] = useState([]);
     const [advertName, setAdvertName] = useState('');
-    const [advertError, setAdvertError] = useState(false);
+    const [socialMediaLinkError, setSocialMediaLinkError] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [gender, setGender] = useState('');
     const [location, setLocation] = useState('');
@@ -29,6 +32,8 @@ const CreateAdvert = () => {
     const [taskTypes, setTaskTypes] = useState(['']);
     const [isLoading, setIsLoading] = useState(false);
     const [taskTypeID, setTaskTypeID] = useState('');
+    const [taskName, setTaskName] = useState('');
+    const [socialMediaLink, setSocialMediaLink] = useState('');
 
     
     // Functions to open and close the modal
@@ -38,21 +43,26 @@ const CreateAdvert = () => {
     // process submit 
     const processSubmit = () => {
 
+      setPlatformError(false)
+      setCaptionError(false)
+      setSocialMediaLinkError(false)
+    
+
         // check advert name 
-        if(advertName == '') {
-            setAdvertError(true);
+        if(appName == '') {
+            setPlatformError(true);
             return;
         }
 
         // check caption
-        if(caption == '') {
+        if(taskName == '') {
             setCaptionError(true);
             return;
         }
 
-        if(selectedImage == null) {
-            setPlatformError(true);
-            return;
+        if(socialMediaLink == '') {
+          setSocialMediaLinkError(true);
+          return;
         }
 
         //open modal
@@ -66,10 +76,11 @@ const CreateAdvert = () => {
 
         const data = {
             taskTypeID : taskTypeID,
-            taskType : "Advert",
-            taskName : advertName,
+            taskType : "Engagement",
+            taskName : taskName,
             platform : appName,
-            caption_message : caption,
+            engagement_type : taskName,
+            social_media_link: socialMediaLink,
             no_of_post : advertNo,
             price : adPrice,
             gender : gender,
@@ -129,35 +140,19 @@ const CreateAdvert = () => {
   
     }, []);
 
-    // change advert
-    const onChangeAdvertName = (value) => {
-        setAdvertName(value)
-        if(value.length < 5) {
-            setAdvertError(true)
-        }else{
-            setAdvertError(false)
-        }
-    }
+    const handleEngagementSelect = (index, task, pricing) => {
 
-
-    const handleFileChange = (event) => {
-        const selectedFiles = Array.from(event.target.files);
-        setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
-        console.log(files);
-      };
-
-
-    const handleSelect = (index, taskID, title, price, image_src, Description) => {
-
-        setSelectedImage(index);
-        setAdPrice(price)
-        setAppName(title)
-        setImageSrc(image_src)
-        setDescription(Description)
-        calculatePrice(price, advertNo)
-        setTaskTypeID(taskID)
-
+        setSelectedTask(index);
+        setTaskName(task);
+        setAdPrice(pricing)
+        calculatePrice(pricing, advertNo);
     };
+
+    const handlePlatformSelect = (index, title, image) => {
+      setSelectedImage(index);
+      setAppName(title);
+      setImageSrc(image)
+    }
 
     const onChangeAdvertNo = (value) => {
         setAdvertNo(value)
@@ -180,102 +175,137 @@ const CreateAdvert = () => {
         setTotalPrice(price * count);
     }
 
-    {/** 
+    
     const icons = [
         {src: './fb_icon.png', title: 'Facebook', pricing: 250},
         {src: './tw_icon.png', title: 'X (Twitter)', pricing: 150},
         {src: './inst_icon.png', title: 'Instagram', pricing: 200},
         {src: './whatsapp_icon.png', title: 'WhatsApp', pricing: 150},
         {src: './tiktok_icon.png', title: 'TikTok', pricing: 150},
-    ]*/}
+        {src: './apple_store.png', title: 'Apple Store', pricing: 150},
+        {src: './play_store.png', title: 'Play Store', pricing: 150},
+        {src: './telegram.png', title: 'Telegram', pricing: 150},
+        {src: './you_tube.png', title: 'Youtube', pricing: 150},
+    ]
+
+    const engagements = [
+      {task: 'Follow', desc: 'Get real people to follow a page or account', pricing: 250},
+      {task: 'Likes', desc: 'Get real people to like a page or account', pricing: 150},
+      {task: 'Share', desc: 'Get real people to share a page or content', pricing: 200},
+      {task: 'Comment', desc: 'Get real people to comment a page or content', pricing: 150},
+      {task: 'Retweet', desc: 'Get real people to retweet a page or account', pricing: 150},
+  ]
+
+  const engagement = []
 
   return (
     <>
     <div className='md:max-w-[1250px] mx-auto my-6 mb-10'>
           <Header />
 
-
           <div className='mt-[85px] ml-[70px] mb-[10px]'>
-            <BackButton />
-          </div>
+          <BackButton />
+        </div>
           <div className='inner-display-box'>
 
             <div className='bg-[#f3f3f3] p-3 rounded-[1rem] mr-5'>
-                    <FaPeopleGroup className='text-primaryOrange text-[2rem]' />
+                    <IoLogoWechat className='text-primaryOrange text-[2rem]' />
             </div>
             <div className='flex-1'>
-                <h1>Post Your Adverts on Social Media </h1>
-                <p>Get social media people with at least 100 followers to repost your adverts and perform social tasks for you on their social media accounts</p>
+                <h1>Buy Social Media Engagement</h1>
+                <p>Engagement tasks are created to get people to perform simple tasks for you on their social media account. Check below to see the price of creating various engagement tasks:</p>
             </div>
              <div>
                 <ul className='bd-crumb'>
                     <li className='text-copyrightBlue'>Home</li>
-                    <li>Post Advert</li>
+                    <li>Buy Engagement Post</li>
                 </ul>
              </div>
           </div>
-
           <div>
 
           <div className='inner-body'>
           <div className='pl-7 pb-7'>
             
-          <div className='mb-6'>
-                <h4>Enter Advert Name</h4>
-                <input type='text' value={advertName} onChange={(e) => onChangeAdvertName(e.target.value)} className='form-input' placeholder='Enter Advert Name here...' />
-                {(advertError) &&
-                    <div className='flex items-center gap-x-1 mb-1'>
-                        <RiErrorWarningLine className='text-red-600'/> <p className='text-red-600 text-[0.7rem]'>Advert name is required</p>
-                    </div>
-                  }
-          </div>
+
               <h4>Choose your preferred social media platform</h4>
-  
-              <div className='flex items-center justify-start gap-x-12 py-5'>
+              <div className='flex items-center gap-y-10 flex-wrap justify-start gap-x-12 py-5'>
   
                     { 
-                       (taskTypes.length > 0) && 
+                       (icons.length > 0) && 
 
-                            taskTypes.map((type, index) => (
+                       icons.map((type, index) => (
                             <PlatformIcon 
                                 key={index}
-                                img={type.image_src}
-                                title={type.appName}
-                                pricing={type.taskPrice}
+                                img={type.src}
+                                title={type.title}
                                 isSelected={selectedImage === index}
-                                onSelect={() => handleSelect(index, type.taskId, type.platform, type.taskPrice, type.image_src, type.taskDescription)}
+                                onSelect={() => handlePlatformSelect(index, type.title, type.src)}
                             />
                     ))
                      }
               </div>
               {(platformError) &&
                 <div className='flex items-center gap-x-1 mb-1'>
-                    <RiErrorWarningLine className='text-red-600'/> <p className='text-red-600 text-[0.7rem]'>Social media platform is required</p>
+                    <RiErrorWarningLine className='text-red-600'/> <p className='text-red-600 text-[0.77rem]'>Social media platform is required</p>
                 </div>
               }
               
               <div className='flex gap-x-4'>
-                  <h4 className='mt-8'>Advert Caption or Message</h4> 
+                  <h4 className='mt-8'>Select Engagement Type</h4> 
   
                   <a 
                       className='tool-tip-text' 
                       data-tooltip-id="my-tooltip" 
                       data-tooltip-place='right' 
-                      data-tooltip-content="Include important details, business contact and website link"
+                      data-tooltip-content="Select the type of engagement you would want to get done by real people"
                   >
                       Read Description here
                   </a>
                   <Tooltip id="my-tooltip" style={{fontSize: 12}} className='text-[0.8rem]' />
               </div>
-              <textarea rows={8} value={caption} onChange={(e) => onChangeCaption(e.target.value)} className='form-input' placeholder='Enter message or text here' />
+
+                <div className='max-h-[300px] h-[300px] mt-3 mb-3 border p-3 overflow-y-scroll text-[0.87rem] border-[#e4e4e4] w-[60%] rounded-[0.7rem]'>
+                    
+                
+
+                    {
+                      (engagements.length > 0) ?
+
+                      engagements.map((engagement, index) => (
+
+                        <EngagementItem 
+                            key={index}
+                            isSelected={selectedTask === index}
+                            title={engagement.task}
+                            desc={engagement.desc}
+                            price={engagement.pricing}
+                            onSelect={() => handleEngagementSelect(index, engagement.task, engagement.pricing)}
+                        />
+
+                      )) :
+
+                      <div className='flex h-[120px] text-[#c0c0c0] text-[0.8rem] font-[400] items-center justify-center'>Select Platform to load engagement type</div>
+                    }
+                </div>
               {(captionError) &&
                 <div className='flex items-center gap-x-1 mb-1'>
-                    <RiErrorWarningLine className='text-red-600'/> <p className='text-red-600 text-[0.7rem]'>Caption must be between 50 and 1000 characters</p>
+                    <RiErrorWarningLine className='text-red-600'/> <p className='text-red-600 text-[0.77rem]'>Select platform engagement type</p>
                 </div>
               }
+
+              <div className='mb-3 mt-10'>
+              <h4>Social Media Page/Profile Link</h4>
+              <input type='text' value={socialMediaLink} onChange={(e) => setSocialMediaLink(e.target.value)} className='form-input' placeholder='Enter social media link here' />
+              {(socialMediaLinkError) &&
+                  <div className='flex items-center gap-x-1 mb-1'>
+                      <RiErrorWarningLine className='text-red-600'/> <p className='text-red-600 text-[0.77rem]'>Social media page/profile link name is required</p>
+                  </div>
+                }
+              </div>
   
               <div className='flex gap-x-4 -mt-2'>
-              <h4 className='mt-8'>Number of Advert Post</h4> 
+              <h4 className='mt-8'>Number of {(taskName == '') ? 'Post' : `${taskName} Post`}</h4> 
               <a 
                   className='tool-tip-text' 
                   data-tooltip-id="tip2" 
@@ -326,41 +356,8 @@ const CreateAdvert = () => {
                   <option value="Abuja">Abuja</option>
               </select>
   
-              
-              <div className='flex gap-x-4 -mt-1'>
-              <h4 className='mt-8'>Upload Photo Advert</h4> 
-  
-              <a 
-                  className='tool-tip-text' 
-                  data-tooltip-id="tip3" 
-                  data-tooltip-place='right' 
-                  data-tooltip-content="Upload a photo or video format you want people to post with your advert"
-              >
-                  Read Description here
-              </a>
-              <Tooltip id="tip3" style={{fontSize: 12}} className='text-[0.8rem]' />
-          </div>
-              <input 
-                type='file' 
-                multiple
-                onChange={handleFileChange} 
-                className='form-input' />
               </div>
-              <div className='mx-7'>
-              {files.length > 0 && (
-                <ul className="mb-4 flex items-center justify-start gap-x-5">
-                  {files.map((file, index) => (
-                    <li key={index} className="text-primaryOrange text-center text-[0.8rem]">
-                        <div className='bg-[#f5f5f5] mx-auto w-[75px] h-[65px] p-4 rounded-[1rem] mb-2'>
-                            <SlPicture  className='text-[#bdc7eb] mx-auto text-[2rem]'/>
-                        </div>
-                      {file.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-              </div>
-              
+         
   
               <div className='cal-area-btn'>
                   
@@ -394,30 +391,30 @@ const CreateAdvert = () => {
    
      <div className='py-5 px-10 modal-inner-body overflow-scroll'>
 
-        <h4>Advert Name</h4>  
-        <div className='bg-[#f9f9f9] w-full py-2 mt-2 rounded-xl mb-6 px-3'>
-            <h6 className='text-primaryOrange text-[0.85rem] font-[400]'>{advertName}</h6>
-        </div>
-
         <h4>Selected Social media platform</h4>  
         
-        <div className='mt-4 mb-6 flex justify-start items-center gap-x-4'>
-              <div className='preview-platform-icon w-[250px]'>
+        <div className='mt-4 mb-8 flex justify-start items-center gap-x-4'>
+              <div className='preview-platform-icon'>
                 <img width={110} src={image_src} />
               </div>
               <div>
-                <h4 className='mb-2'><span className='bg-primaryOrange text-white px-2 py-1 text-[0.85rem] rounded-[1rem]'>₦ {adPrice}</span> <span className='font-[500] text-primaryBlue text-[0.85rem] ml-1'>Per Post</span></h4>
-                <p className='text-[0.77rem] text-[#919195]'>{description}</p>
+                <h4 className='mb-2'><span className='bg-primaryOrange text-white px-2 py-1 text-[0.85rem] rounded-[1rem]'>₦ {adPrice}</span> <span className='font-[500] text-primaryBlue text-[0.85rem] ml-1'>Per {taskName}</span></h4>
               </div>
         </div>
-        
-        <h4>Advert Caption or Message</h4> 
-        <div className='overflow-scroll mb-6 min-h-[80px] w-full mt-2 p-4 rounded-[1rem] bg-[#f9f9f9]'>
-            <p className='text-[0.8rem] text-[#919195]'>{caption}</p>
+
+        <h4>Engagement Type</h4>  
+        <div className='bg-[#f9f9f9] w-full py-3 mt-2 rounded-lg mb-8 px-3'>
+            <h6 className='text-primaryOrange text-[0.8rem] font-[400]'>{taskName}</h6>
+            <p className='text-[#696969] font-[400] text-[0.78rem]'>Get real people to {taskName} a page or profile</p>
         </div>
 
+        <h4>Social Media Page/Profile Link</h4>  
+        <div className='bg-[#f9f9f9] w-full py-3 mt-2 rounded-lg mb-8 px-3'>
+            <h6 className='text-primaryOrange text-[0.8rem] font-[400]'>{socialMediaLink}</h6>
+        </div>
+        
         <h4>Additional Details</h4> 
-        <div className='flex justify-between items-start gap-x-4 mt-2 mb-6'>
+        <div className='flex justify-between items-start gap-x-4 mt-2 mb-8'>
               <div className='preview-details-box'>
                     <h4>Number of Advert Post</h4>
                     <h6 className='preview-details-text'>{advertNo}</h6>
@@ -431,29 +428,6 @@ const CreateAdvert = () => {
                 <h6 className='preview-details-text'>{location}</h6>
              </div>
         </div>
-
-        <h4>Selected Photo Advert</h4> 
-        <div className='overflow-scroll h-300px w-full mt-2 p-4 rounded-[1rem] bg-[#f9f9f9]'>
-        <p className='text-[0.8rem] text-[#919195]'>
-
-            {
-                (files.length == 0) && 
-                <p className='text-primaryOrange'>No file selected</p>
-            }
-
-            {files.length > 0 && (
-                <ul className="text-primaryOrange flex-wrap flex gap-2">
-                  {files.map((file, index) => (
-                    <li key={index}>
-                      {file.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-        </p>
-      </div>
-
-
         
      </div>
     
@@ -508,4 +482,4 @@ const CreateAdvert = () => {
   )
 }
 
-export default CreateAdvert
+export default CreateEngagement

@@ -16,7 +16,7 @@ const AdvertArea = () => {
                 <h1>Buy Social Media Engagement</h1>
                 <div className='advert-details'>
                     <p>Earn steady income by reselling products and posting adverts and performing social media engagement tasks for businesses and top brands on your social media account.</p>
-                    <Link className='advert-details-link' to="/create-advert">Start Here</Link> 
+                    <Link className='advert-details-link' to="/create-engagement">Start Here</Link> 
                 </div>
             </div>
         </div>

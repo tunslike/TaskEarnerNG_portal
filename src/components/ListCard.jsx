@@ -1,8 +1,8 @@
 import React from 'react'
 
-const ListCard = (props) => {
+const ListCard = ({onSelect}) => {
   return (
-    <div className='list-item-box'>
+    <div onClick={onSelect} title='View Tasks' className='list-item-box'>
     <img src='./img1.jpg' />
         <div className='px-4 pb-5'>
             <div>

@@ -7,20 +7,34 @@ import { Dashboard,
          Referrals, 
          SellOut, 
          Support, 
-         CreateAdvert} from "../pages";
+         CreateAdvert,
+         CreateEngagement,
+         CompleteTask,
+         Login, Register
+        } from "../pages";
+import { Account, Orders } from "../pages/Account";
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
     return (
         <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/Profile" element={<Profile />} />
-            <Route path="/advertise" element={<Advertise />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/referrals" element={<Referrals />} />
-            <Route path="/sellout" element={<SellOut />} />
-            <Route path="/support" element={<Support />} />
-            <Route path="/create-advert" element={<CreateAdvert />} />
-            <Route path="*" element={<Dashboard />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dasboard" element={<Dashboard />} />
+            <Route element={<ProtectedRoute />}>
+                <Route path="/Profile" element={<Profile />} />
+                <Route path="/advertise" element={<Advertise />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
+                <Route path="/referrals" element={<Referrals />} />
+                <Route path="/sellout" element={<SellOut />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/create-advert" element={<CreateAdvert />} />
+                <Route path="/create-engagement" element={<CreateEngagement />} />
+                <Route path="/complete-task" element={<CompleteTask />} />
+                <Route path="/dashboard/account" element={<Account />} />
+                <Route path="/dashboard/orders" element={<Orders />} />
+            </Route> 
+            <Route path="*" element={<Login />} />
         </Routes>
     );
 };
