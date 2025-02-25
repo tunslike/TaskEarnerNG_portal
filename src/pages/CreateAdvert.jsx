@@ -6,9 +6,12 @@ import { CgClose } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl";
 import { Tooltip } from 'react-tooltip';
 import Modal from 'react-modal';
+import { useSelector } from 'react-redux';
 import { fetchTaskTypes, postNewTask } from '../services/TasksService';
 
 const CreateAdvert = () => {
+
+   const subscriberData = useSelector((state) => state.subscriber.subscriberData)
 
     const [totalPrice, setTotalPrice] = useState(0.00);
     const [advertNo, setAdvertNo] = useState(1);
@@ -65,6 +68,8 @@ const CreateAdvert = () => {
     const makePaymentAndSubmit = async () => {
 
         const data = {
+          
+            subscriberID : subscriberData.subscriberId,
             taskTypeID : taskTypeID,
             taskType : "Advert",
             taskName : advertName,

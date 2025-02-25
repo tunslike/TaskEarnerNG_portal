@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+
 import { FaArrowRightLong } from "react-icons/fa6";
 import ListCard from './ListCard';
 import Modal from 'react-modal';
@@ -8,12 +9,11 @@ import { IoMdInformationCircleOutline } from "react-icons/io";
 import { RiInformationLine } from "react-icons/ri";
 import {TaskTimer} from '../components';
 import { Link } from 'react-router-dom'
+import TaskImageMatcher from '../constants/TaskImageMatcher';
 
-const TaskList = (props) => {
-
+const TaskList = ({title, tasks}) => {
 
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoading, setLoading] = useState(false);
     const [taskStart, setTaskStart] = useState(null);
 
     // Functions to open and close the modal
@@ -24,23 +24,43 @@ const TaskList = (props) => {
         setTaskStart(true)
     }
 
+    const data = [
+        { id: 1, name: "Alice", status: "active", img: '/insta_taskbg.png' },
+        { id: 2, name: "Bob", status: "inactive", img: '/twitter_taskbg.png'  },
+        { id: 3, name: "Charlie", status: "active", img: '/youtube_taskbg.png' },
+        { id: 4, name: "David", status: "inactive", img: '/whatsapp_taskbg.png' },
+        { id: 5, name: "Facebook", status: "inactive", img: '/facebook_taskbg.png' },
+      ];
+
+    useEffect(() => {
+        console.log("Received users in child:", tasks);
+      }, [tasks]);
+
   return (
     <section className='md:max-w-[1100px] mx-auto my-10'>
         <div className='task-body'>
             <div className='flex justify-between items-center'>
                 <div className='flex items-baseline pb-2 gap-5'>
-                    <h1 className='ml-4'>{props.title}</h1>
+                    <h1 className='ml-4'>{title}</h1>
                     <h6>
-                        46 Tasks Available
+                      0 Tasks Available
                     </h6>
                 </div>
                 <a>View All <FaArrowRightLong /></a>
             </div>
             <div className='task-box'>
-                <ListCard onSelect={openModal} />
+            {/**    <ListCard onSelect={openModal} /> */}
+
+       
                 <ListCard />
+
             </div>
+
+
         </div>
+
+
+
         
          {/* Modal */}
          <Modal
@@ -112,13 +132,9 @@ const TaskList = (props) => {
                 </Link> 
             )
             }
-
-        
           </div>
-
-
-
         </Modal>
+
     </section>
   )
 }

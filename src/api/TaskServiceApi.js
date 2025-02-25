@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const api = axios.create({
+const taskApi = axios.create({
   baseURL: 'http://localhost:9192/api/v1',
   headers: {
     'Content-Type': 'application/json',
@@ -8,7 +8,7 @@ const api = axios.create({
 });
 
 // Add token to requests if available
-api.interceptors.request.use((config) => {
+taskApi.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`;
@@ -16,4 +16,4 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export default api;
+export default taskApi;

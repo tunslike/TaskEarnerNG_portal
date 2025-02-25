@@ -19,8 +19,16 @@ import SideBar from "./SideBar";
 import TaskModal from "./TaskModal";
 import TaskTimer from "./TaskTimer";
 import BackButton from "./BackButton";
+import Preloader from "./Preloader";
+import RenderTasks from "./RenderTasks";
+import TruncatedText from "./TruncatedText";
+import CardSlider from "./CardSlider";
 
 export {
+    CardSlider,
+    TruncatedText,
+    RenderTasks,
+    Preloader,
     BackButton,
     TaskTimer,
     TaskModal,

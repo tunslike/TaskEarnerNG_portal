@@ -11,8 +11,12 @@ import { IoChatbubblesOutline } from "react-icons/io5";
 import { HiOutlineLogout } from "react-icons/hi";
 import { LiaMoneyBillWaveSolid } from "react-icons/lia";
 import { LiaMoneyBillAltSolid } from "react-icons/lia";
+import { useSelector } from 'react-redux';
 
 const SideBar = (props) => {
+
+  const subscriberData = useSelector((state) => state.subscriber.subscriberData)
+
   return (
     <div>
     <button className='bg-[#f3f3f3] p-2 rounded-[0.8rem] -mt-8 mr-4 absolute right-0'>
@@ -24,12 +28,12 @@ const SideBar = (props) => {
   </div>
 
   <div className='mt-5 flex gap-2 items-center justify-center'>
-    <h1 className='text-copyrightBlue font-[500] text-[1.3rem]'>Babatunde Tunslike</h1>
+    <h1 className='text-copyrightBlue font-[500] text-[1.3rem]'>{`${subscriberData.firstname} ${subscriberData.lastname}`}</h1>
     <button title='Edit Profile' className='hover:bg-[#f3f3f3] rounded-full p-1'>
       <MdEdit className='hover:text-primaryOrange text-[#507178] text-[1.1rem]' />
     </button>
 </div>
-<h5 className='text-center text-primaryOrange text-[0.8rem]'>@tunslikeb1234</h5>
+<h5 className='text-center text-primaryOrange text-[0.8rem]'>@{subscriberData.username}</h5>
 
 <div className='border-t border-b border-[#f3f3f3] py-7 px-7 mt-6'>
     <h1 className='text-[1.1rem] font-[500]'>Total Earnings</h1>
@@ -43,9 +47,9 @@ const SideBar = (props) => {
 </div>
 
 <div className='p-7'>
-    <ProfileLink title="Orders" active={(props.active == 'orders') ? true : null} to="/dashboard/orders" icon={<BsBasket3 className='text-primaryOrange text-[1rem]' />} />
-    <ProfileLink title="Payments" active={(props.active == 'payments') ? true : null} to="/dashboard/transactions" icon={<LiaMoneyBillAltSolid className='text-primaryOrange text-[1rem]' />} />
-    <ProfileLink title="Withdrawals" active={(props.active == 'withdrawal') ? true : null} to="/dashboard/withdrawal" icon={<LiaMoneyBillWaveSolid className='text-primaryOrange text-[1rem]' />} />
+    <ProfileLink title="Orders" active={(props.active == 'orders') ? true : null} to="/orders" icon={<BsBasket3 className='text-primaryOrange text-[1rem]' />} />
+    <ProfileLink title="Payments" active={(props.active == 'payments') ? true : null} to="/transactions" icon={<LiaMoneyBillAltSolid className='text-primaryOrange text-[1rem]' />} />
+    <ProfileLink title="Withdrawals" active={(props.active == 'withdrawal') ? true : null} to="/withdrawal" icon={<LiaMoneyBillWaveSolid className='text-primaryOrange text-[1rem]' />} />
     <ProfileLink title="Manage Tasks" active={(props.active == 'tasks') ? true : null} icon={<LuLayoutList className='text-primaryOrange text-[1rem]' />} />
     <ProfileLink title="Notifications" active={(props.active == 'notification') ? true : null} icon={<IoNotificationsOutline className='text-primaryOrange text-[1rem]' />} />
     <ProfileLink title="Customer Support" icon={<IoChatbubblesOutline className='text-primaryOrange text-[1rem]' />} />

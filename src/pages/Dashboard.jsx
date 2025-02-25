@@ -1,23 +1,36 @@
-import { useState, useEffect } from 'react'
-import { fetchAllTasks } from '../services/TasksService';
-import { Header, Footer, Account, AdvertArea, TaskList, AllTasks } from '../components';
+import React, {useState, useEffect} from 'react'
+import Slider from "react-slick";
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { Header, Footer, Account, AdvertArea, TaskList, AllTasks, RenderTasks, CardSlider } from '../components';
 
 const Dashboard = () => {
 
-    const [tasks, setTasks] = useState(null);
 
-    const fetchTasks = async () => {
-      const data = await fetchAllTasks();
-      setTasks(data)
-      console.log(data)
-    }
-  
+    const subscriberData = useSelector((state) => state.subscriber.subscriberData)
+
+
+    const [tasks, setTasks] = useState([]);
+
     useEffect(() => {
-  
-      //fetchTasks();
-  
-    }, []);
+      
+      axios.get('http://localhost:9192/api/v1/tasks/fetchAllTasks?status=0')
 
+        .then((response) => {
+
+          setTasks(response.data);
+  
+
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+    }, [tasks]); // Empty dependency array ensures one-time execution
+
+
+    const SocialTasks = tasks.filter((task) => task.taskCategory === 'Social');
+
+    const WatchTasks = tasks.filter((task) => task.taskCategory === 'Watch');
 
   return (
     <>
@@ -25,10 +38,14 @@ const Dashboard = () => {
             <Header />
             <Account />
             <AdvertArea />
-            <TaskList title="Your Uncompleted Tasks" />
-            <TaskList title="Social Media Tasks" />
-            <TaskList title="Watch & Earn" />
-            <TaskList title="Quick Tasks" />
+            <div className="flex items-center justify-center bg-gray-100">
+              <CardSlider />
+            </div>
+            <TaskList users={tasks} title="Your Uncompleted Tasks" />
+            <RenderTasks tasks={SocialTasks} title="Social Media Tasks" />
+            <RenderTasks tasks={WatchTasks} title="Watch & Earn" />
+            <RenderTasks tasks={tasks} title="Quick Tasks" />
+      
             <AllTasks />
       </div>
       <Footer />

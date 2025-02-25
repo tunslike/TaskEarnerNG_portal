@@ -1,14 +1,18 @@
 import React from 'react'
 import { IoWalletOutline } from "react-icons/io5";
 import { LuLogOut } from "react-icons/lu";
+import { useAuth } from "../context/AuthContext";
 
 const Account = () => {
+
+  const { user } = useAuth();
+
   return (
     <section className='md:max-w-[1100px] mx-auto mt-[85px]'>
       <div className='display-box'>
         <div className='flex items-center justify-between gap-5 w-full'>
         <div className='flex items-center gap-5'>
-            <h1>Welcome, Babatunde</h1>
+            <h1>Welcome, {"Babatunde"}</h1>
             <div className='bg-green-600 text-white px-3 rounded-[1rem] py-1 text-[0.65rem]'>Active Member</div>
         </div>
          <div className='flex items-center justify-start gap-3'>

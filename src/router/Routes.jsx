@@ -20,19 +20,20 @@ const AppRoutes = () => {
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/dasboard" element={<Dashboard />} />
+            <Route path="/home" element={<Dashboard />} />
             <Route element={<ProtectedRoute />}>
+         
+                <Route path="/create-engagement" element={<CreateEngagement />} />
                 <Route path="/Profile" element={<Profile />} />
                 <Route path="/advertise" element={<Advertise />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/referrals" element={<Referrals />} />
                 <Route path="/sellout" element={<SellOut />} />
                 <Route path="/support" element={<Support />} />
-                <Route path="/create-advert" element={<CreateAdvert />} />
-                <Route path="/create-engagement" element={<CreateEngagement />} />
+                <Route path="/create-advert" element={<CreateAdvert />} />  
                 <Route path="/complete-task" element={<CompleteTask />} />
-                <Route path="/dashboard/account" element={<Account />} />
-                <Route path="/dashboard/orders" element={<Orders />} />
+                <Route path="/account" element={<Account />} />
+                <Route path="/orders" element={<Orders />} />
             </Route> 
             <Route path="*" element={<Login />} />
         </Routes>

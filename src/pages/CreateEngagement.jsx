@@ -6,11 +6,14 @@ import { RiErrorWarningLine } from "react-icons/ri";
 import { CgClose } from "react-icons/cg";
 import { SlPicture } from "react-icons/sl";
 import { Tooltip } from 'react-tooltip';
+import { useSelector } from 'react-redux';
 import Modal from 'react-modal';
 import { fetchTaskTypes, postNewTask } from '../services/TasksService';
 
 const CreateEngagement = () => {
   
+
+    const subscriberData = useSelector((state) => state.subscriber.subscriberData)
 
     const [totalPrice, setTotalPrice] = useState(0.00);
     const [advertNo, setAdvertNo] = useState(1);
@@ -75,6 +78,7 @@ const CreateEngagement = () => {
     const makePaymentAndSubmit = async () => {
 
         const data = {
+            subscriberID : subscriberData.subscriberId,
             taskTypeID : taskTypeID,
             taskType : "Engagement",
             taskName : taskName,
@@ -86,6 +90,8 @@ const CreateEngagement = () => {
             gender : gender,
             location : location
           }
+
+          console.log(data);
 
           // set isLoading
           setIsLoading(true);

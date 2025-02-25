@@ -1,42 +1,52 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { loginSubscriber, registerSubcriber } from "../services/SubscriberService";
+import { useDispatch } from "react-redux";
+import { updateSubscriberData } from "../store/subscriberSlice";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+
+  const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      setUser({ token });
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-      setUser(null);
-    }
-  }, [token]);
 
   const login = async (credentials) => {
+
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/login", credentials);
-      const authToken = response.data.token;
+    
+        // Call subscriber Service
+        const response = await loginSubscriber(credentials);
 
-      localStorage.setItem("token", authToken);
-      setToken(authToken);
-      setUser({ token: authToken });
+        // update store
+        dispatch(updateSubscriberData(response));
 
-      return true;
+        const authToken = response.token;
+
+        localStorage.setItem("token", authToken);
+
+        setToken(authToken);
+
+        setUser(response);
+
+        return true;
+
     } catch (error) {
       console.error("Login failed", error);
       return false;
     }
+
   };
 
   const register = async (userData) => {
+
     try {
-      await axios.post("http://localhost:8080/api/auth/register", userData);
+
+      await registerSubcriber(userData);
       return true;
+
     } catch (error) {
       console.error("Registration failed", error);
       return false;
