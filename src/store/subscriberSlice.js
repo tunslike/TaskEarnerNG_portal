@@ -11,12 +11,16 @@ export const subscriberSlice = createSlice({
     reducers: {
         updateSubscriberData: (state, action) => {
             state.subscriberData = action.payload
+        },
+        logoutSubscriber: (state) => {
+            state.subscriberData = []
         }
     },
 });
 
 export const {
-    updateSubscriberData
+    updateSubscriberData,
+    logoutSubscriber
 } = subscriberSlice.actions;
 
 export default subscriberSlice.reducer;

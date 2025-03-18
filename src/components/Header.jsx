@@ -6,11 +6,48 @@ import { MdArrowRight } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
 import { Link } from 'react-router-dom'
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
+import { persistor } from '../store/store';
+import { useDispatch } from 'react-redux';
+import { logoutSubscriber } from '../store/subscriberSlice';
+import Swal from 'sweetalert2';
 
 const Header = () => {
 
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logoutSubscriber());
+    persistor.purge();
+    localStorage.removeItem('token');
+    navigate('/login')
+  }
+
+  // prompt complete task
+  const logoutUser = () => {
+
+      Swal.fire({
+          title: "Do you want to Logout?",
+          text: "",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#0ad13f",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, Proceed!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+          
+              //submit completed task
+              handleLogout();
+              return;
+            
+          }
+        });
+  }
 
   return (
     <header>
@@ -51,7 +88,7 @@ const Header = () => {
               <li className='hover:text-primaryOrange flex items-center gap-x-3'><MdArrowRight className='text-primaryOrange' /> Account Settings</li>
               <li className='hover:text-primaryOrange flex items-center gap-x-3'><MdArrowRight className='text-primaryOrange' /> Privacy Policy</li>
               <li>
-                  <button className='mt-4 justify-center flex items-center py-[2px] gap-x-2 w-full text-[0.8rem] hover:text-white hover:bg-primaryOrange border border-primaryOrange text-primaryOrange font-[500] rounded-[0.7rem]'>
+                  <button onClick={logoutUser} className='mt-4 justify-center flex items-center py-[2px] gap-x-2 w-full text-[0.8rem] hover:text-white hover:bg-primaryOrange border border-primaryOrange text-primaryOrange font-[500] rounded-[0.7rem]'>
                     Logout 
                     <TbLogout className='text-[1rem]'/>
                   </button>

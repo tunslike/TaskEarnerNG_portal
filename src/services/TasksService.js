@@ -12,9 +12,39 @@ export const fetchTasks = async (status) => {
   return response.data;
 };
 
+  // load task session
+  export const loadTaskSession = async (subscriberId) => {
+    const response = await taskApi.get(`/tasks/loadTaskSession?subscriberId=${subscriberId}`);
+    return response.data;
+  };
+
 // fetch task types 
 export const fetchTaskTypes = async () => {
   const response = await taskApi.get('/tasks/fetchTaskTypes');
+  return response.data;
+};
+
+// fetch search text 
+export const fetchSearchText = async (searchText) => {
+  const response = await taskApi.get(`/tasks/fetchSearchTasks?searchText=${searchText}`);
+  return response.data;
+}
+
+// fetch subscriber completed tasks
+export const loadCompletedTask = async (subscriberId) => {
+  const response = await taskApi.get(`/tasks/loadCompletedTasks?subscriberId=${subscriberId}`);
+  return response.data;
+}
+
+// fetch subscriber completed tasks
+export const loadSubscribedTask = async (subscriberId) => {
+  const response = await taskApi.get(`/tasks/loadSubscribedTasks?subscriberId=${subscriberId}`);
+  return response.data;
+}
+
+// save task session
+export const saveTaskSession = async (data) => {
+  const response = await taskApi.post('/tasks/saveTaskSession', data);
   return response.data;
 };
 
@@ -24,9 +54,8 @@ export const postNewTask = async (data) => {
   return response.data;
 };
 
-
 //function to submit completed task
-export const submitTask = async (data) => {
-  const response = await taskApi.post('/tasks/submitTask', data);
+export const submitTask = async (data, headers) => {
+  const response = await taskApi.post('/tasks/submitTask', data, headers);
   return response.data;
 };

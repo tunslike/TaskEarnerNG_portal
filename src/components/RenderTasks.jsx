@@ -30,7 +30,7 @@ import "slick-carousel/slick/slick-theme.css";
   );
   
 
-const RenderTasks = ({ tasks, title }) => {
+const RenderTasks = ({ tasks, title, type }) => {
 
 
   const settings = {
@@ -38,6 +38,7 @@ const RenderTasks = ({ tasks, title }) => {
     infinite: false,
     slidesToShow: 4, // Show 3 cards at a time
     slidesToScroll: 1,
+    rtl: false,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
     responsive: [
@@ -63,7 +64,7 @@ const RenderTasks = ({ tasks, title }) => {
     <div className='flex justify-between items-center'>
         <div className='flex items-baseline pb-2 gap-5'>
             <h1 className='ml-4'>{title}</h1>
-            <h6>
+            <h6 className={type == 0 ? `text-[#0582ff] border border-[#0582ff]` : `text-red-600 border border-red-600`}>
               {tasks.length} Tasks Available
             </h6>
         </div>
@@ -73,11 +74,12 @@ const RenderTasks = ({ tasks, title }) => {
 
      <div className="bg-white w-full rounded-[1.5rem] p-5 shadow-sm">
 
-  <Slider {...settings}>
+  <Slider {...settings} className="flex justify-start">
 
     {tasks.map(task => (
       <ListCard 
-        key={task.taskId} 
+        key={task.taskId}
+        taskid={task.taskId} 
         title={task.taskName}
         platform={task.platform}
         icon={task.taskIcon}

@@ -23,8 +23,14 @@ import Preloader from "./Preloader";
 import RenderTasks from "./RenderTasks";
 import TruncatedText from "./TruncatedText";
 import CardSlider from "./CardSlider";
+import ProfileInput from "./ProfileInput";
+import ProgressBar from "./ProgressBar";
+import SearchSelect from "./SearchSelect";
 
 export {
+    SearchSelect,
+    ProgressBar,
+    ProfileInput,
     CardSlider,
     TruncatedText,
     RenderTasks,

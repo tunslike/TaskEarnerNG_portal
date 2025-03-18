@@ -2,15 +2,40 @@ import React, {useState, useEffect} from 'react'
 import Slider from "react-slick";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { Header, Footer, Account, AdvertArea, TaskList, AllTasks, RenderTasks, CardSlider } from '../components';
+import { loadTaskSession } from '../services/TasksService';
+import { Header, Footer, Account, AdvertArea, AllTasks, RenderTasks, CardSlider } from '../components';
+
 
 const Dashboard = () => {
 
-
     const subscriberData = useSelector((state) => state.subscriber.subscriberData)
-
-
     const [tasks, setTasks] = useState([]);
+    const [taskSession, setTaskSession] = useState([]);
+
+    console.log('subscriber data = ' + subscriberData)
+
+    const loadSaveTaskSession = async () => {
+
+      try {
+
+        const response = await loadTaskSession(subscriberData.subscriberId);
+
+        setTaskSession(response)
+        console.log(taskSession)
+        
+      }catch(e) {
+        setIsLoading(false);
+        alert(e + e.message);
+      }
+
+    }
+
+
+    useEffect(() => {
+
+      loadSaveTaskSession();
+
+    }, [])
 
     useEffect(() => {
       
@@ -25,12 +50,15 @@ const Dashboard = () => {
         .catch((error) => {
           console.error('Error fetching data:', error);
         });
-    }, [tasks]); // Empty dependency array ensures one-time execution
+    }, []); // Empty dependency array ensures one-time execution
 
 
     const SocialTasks = tasks.filter((task) => task.taskCategory === 'Social');
 
     const WatchTasks = tasks.filter((task) => task.taskCategory === 'Watch');
+
+
+    
 
   return (
     <>
@@ -38,13 +66,25 @@ const Dashboard = () => {
             <Header />
             <Account />
             <AdvertArea />
+
             <div className="flex items-center justify-center bg-gray-100">
               <CardSlider />
             </div>
-            <TaskList users={tasks} title="Your Uncompleted Tasks" />
-            <RenderTasks tasks={SocialTasks} title="Social Media Tasks" />
-            <RenderTasks tasks={WatchTasks} title="Watch & Earn" />
-            <RenderTasks tasks={tasks} title="Quick Tasks" />
+
+            {/* render uncompleted task */}
+            {(taskSession.length > 0) &&
+
+              <RenderTasks tasks={taskSession} title="Your Uncompleted Task" />
+            }
+
+            {/* render social media task */}
+            <RenderTasks type={0} tasks={SocialTasks} title="Social Media Tasks" />
+
+            {/* render watch & earn task */}
+            <RenderTasks type={0} tasks={WatchTasks} title="Watch & Earn" />
+
+            {/* render quick task */}
+            <RenderTasks type={0} tasks={tasks} title="Quick Tasks" />
       
             <AllTasks />
       </div>

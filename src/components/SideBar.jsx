@@ -4,7 +4,6 @@ import { FiSettings } from "react-icons/fi";
 import { MdEdit } from "react-icons/md";
 import { LuLogOut } from "react-icons/lu";
 import { BsBasket3 } from "react-icons/bs";
-import { CgNotes } from "react-icons/cg";
 import { LuLayoutList } from "react-icons/lu";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoChatbubblesOutline } from "react-icons/io5";
@@ -12,6 +11,8 @@ import { HiOutlineLogout } from "react-icons/hi";
 import { LiaMoneyBillWaveSolid } from "react-icons/lia";
 import { LiaMoneyBillAltSolid } from "react-icons/lia";
 import { useSelector } from 'react-redux';
+import { Tooltip } from 'react-tooltip';
+import { Link } from 'react-router-dom';
 
 const SideBar = (props) => {
 
@@ -20,18 +21,33 @@ const SideBar = (props) => {
   return (
     <div>
     <button className='bg-[#f3f3f3] p-2 rounded-[0.8rem] -mt-8 mr-4 absolute right-0'>
-    <FiSettings className='text-primaryOrange text-[1.3rem]' />
+    <FiSettings 
+      className='text-primaryOrange text-[1.3rem]' 
+      data-tooltip-id="tip01" 
+      data-tooltip-place='top' 
+      data-tooltip-content="Account Settings"
+    />
+    <Tooltip id="tip01" style={{fontSize: 12}} className='text-[0.8rem]' />
   </button>
 
   <div className='mt-[3rem] flex justify-center'>
       <ProfileIcon />
   </div>
+  
 
   <div className='mt-5 flex gap-2 items-center justify-center'>
     <h1 className='text-copyrightBlue font-[500] text-[1.3rem]'>{`${subscriberData.firstname} ${subscriberData.lastname}`}</h1>
-    <button title='Edit Profile' className='hover:bg-[#f3f3f3] rounded-full p-1'>
+    <Link 
+        to="/manageProfile"
+        title='Edit Profile' 
+        className='hover:bg-[#f3f3f3] rounded-full p-1'
+        data-tooltip-id="profileTip" 
+        data-tooltip-place='top' 
+        data-tooltip-content="Manage Profile"
+    >
       <MdEdit className='hover:text-primaryOrange text-[#507178] text-[1.1rem]' />
-    </button>
+    </Link>
+    <Tooltip id="profileTip" style={{fontSize: 12}} className='text-[0.8rem]' />
 </div>
 <h5 className='text-center text-primaryOrange text-[0.8rem]'>@{subscriberData.username}</h5>
 

@@ -6,7 +6,7 @@ import { BiSolidGift } from "react-icons/bi";
 import { Link } from 'react-router-dom'
 
 
-const ListCard = ({title, icon, thumbnail, desc, platform, price }) => {
+const ListCard = ({title, icon, taskid, thumbnail, desc, platform, price }) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -70,9 +70,9 @@ const ListCard = ({title, icon, thumbnail, desc, platform, price }) => {
             
           <h1 className='text-[0.9rem] ml-6 font-[500]'>Earnings: <span className='bg-primaryOrange text-white rounded-[1rem] px-3 py-[2px]'>₦ 50</span> </h1>
          <Link
-           to="/complete-task"
+           to="/complete-task" state={{taskId: taskid, taskName: title, thumbnail: icon}}
            className="px-12 py-3 text-[0.85rem] flex items-center gap-x-1 bg-green-500 text-white rounded-[2rem] hover:bg-green-600 transition"
-         >
+         > 
             Take Offer <BiSolidGift className='text-[1.1rem]' />
           </Link> 
          </div>

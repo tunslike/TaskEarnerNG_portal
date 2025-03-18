@@ -9,8 +9,9 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
   const dispatch = useDispatch();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(localStorage.getItem("token") || null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [subscriberId, setSubscriberId] = useState('');
 
 
   const login = async (credentials) => {
@@ -26,6 +27,8 @@ export const AuthProvider = ({ children }) => {
         const authToken = response.token;
 
         localStorage.setItem("token", authToken);
+
+        setSubscriberId(response.subscriberId);
 
         setToken(authToken);
 
@@ -61,7 +64,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, subscriberId, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

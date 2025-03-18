@@ -5,32 +5,106 @@ import { RiInformationLine } from "react-icons/ri";
 import { LuExternalLink } from "react-icons/lu";
 import { FaCheck } from "react-icons/fa";
 import { Tooltip } from 'react-tooltip';
+import { useSelector } from 'react-redux';
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import Swal from 'sweetalert2';
-import { Link, useNavigate } from 'react-router-dom'
-import { submitTask } from '../services/TasksService';
+import { RiErrorWarningLine } from "react-icons/ri";
+import { useNavigate, useLocation } from 'react-router-dom'
+import { submitTask, saveTaskSession } from '../services/TasksService';
+
 
 
 const CompleteTask = () => {
 
+    const subscriberData = useSelector((state) => state.subscriber.subscriberData)
+    const location = useLocation();
+
     const [taskStart, setTaskStart] = useState(null);
     const [socialMediaAccount, setSocialMediaAccount] = useState('');
     const [socialMediaAcctError, setSocialMediaAcctError] = useState(null);
+    const [fileError, setFileError] = useState(null)
     const [isLoading, setIsLoading] = useState(null);
+    const [saveSession, setSaveSession] = useState(false);
+    const [file, setFile] = useState(null);
 
     const navigate = useNavigate();
+    const taskId = location.state?.taskId;
+    const taskName = location.state?.taskName;
+    const thumbnail = location.state?.thumbnail;
+
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    };
+
+    // save task session
+    const saveTask = async () => {
+
+        const data = {
+
+            subscriberId : subscriberData.subscriberId,
+            taskID : taskId
+          }
+
+    console.log(data)
+
+          //post to API
+          try {
+
+                const response = await saveTaskSession(data);
+
+                console.log(response)
+
+                if(response != '') {
+
+                    // set session
+                    setSaveSession(true)
+                    return;
+                 
+                }
+                
+              
+
+          }catch(e) {
+            setIsLoading(false);
+            alert(e + e.message);
+          }
+    }
 
     // submit tasks
     const submitCompletedTask = async () => {
 
+        //clear error
+        setSocialMediaAcctError(null)
+        setFile(null)
+
+        // check social media account
+        if(!socialMediaAccount) {
+            setSocialMediaAcctError('Provide account used to perform task!')
+            return;
+        }
+
+        // check file
+        if (!file) {
+            setFileError("Proof of Work is required!");
+            return;
+        }
+
+   
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("taskId", taskId);
+        formData.append("socialMediaAccount", socialMediaAccount);
+        formData.append("taskCompletedBy", subscriberData.subscriberId);
+        
+
+        /*
         const data = {
 
-            taskID :"f422777b-fc55-44da-bae9-7626b78435bc",
-            socialMediaAccount : "tunslike/facebook.com", 
-            taskCompletedBy : "Ajayi Ahmed",
+            taskID : taskId,
+            socialMediaAccount : socialMediaAccount, 
+            taskCompletedBy : subscriberData.subscriberId,
             proofOfWork : "Work is completed"
-
-          }
+          }*/
 
           //set isLoading
          setIsLoading(true);
@@ -39,7 +113,9 @@ const CompleteTask = () => {
           try {
 
                 setIsLoading(false);
-                const response = await submitTask(data);
+                const response = await submitTask(formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
 
                 if(response != '') {
 
@@ -51,7 +127,7 @@ const CompleteTask = () => {
                       });
 
                       // navigate
-                      navigate("/");
+                      navigate("/home");
 
                     return;
                 }
@@ -64,6 +140,8 @@ const CompleteTask = () => {
           }
     }
 
+
+    // prompt complete task
     const promptCompleteTask = () => {
 
         Swal.fire({
@@ -98,19 +176,12 @@ const CompleteTask = () => {
             if (result.isConfirmed) {
             
                 setTaskStart(true);
+                saveTask();
               //Swal.fire("Deleted!", "Your item has been deleted.", "success");
               
             }
           });
       };
-
-      
-    const handleFileChange = (event) => {
-        const selectedFiles = Array.from(event.target.files);
-        setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
-        console.log(files);
-    };
-
 
     return (
         <div className='md:max-w-[1250px] mx-auto my-6 mb-10'>
@@ -137,23 +208,27 @@ const CompleteTask = () => {
             <div className='inner-body'>
                 <div className='pl-7 pb-7'>
 
-                {taskStart &&
+                {saveSession &&
 
-                    <div className='text-[#0e5461] bg-[#d1ecf1] w-[80%] mb-8 mr-10 border border-[#bfe5eb] px-2 py-[2px] rounded-[1rem] text-[0.73rem] flex items-start gap-x-3'><IoMdInformationCircleOutline className='text-[2rem]' /> Kindly note that you can only perform this task as long as available. This task will be saved on your dashboard once you start and available for you to continue as long as it is available and valid</div>
+                    <div className='text-[#0e5461] bg-[#d1ecf1] w-[55%] mb-8 mr-10 border border-[#bfe5eb] px-2 py-[5px] rounded-[1rem] text-[0.75rem] flex items-center gap-x-1'>
+                        <IoMdInformationCircleOutline className='text-[1.3rem]' /> 
+                            Task has been saved on your dashboard and you can continue as long as it is available.
+                        </div>
                 }
             
                     <div className='mt-4 mb-10 flex items-center gap-x-6'>
                         <div className='preview-platform-icon'>
-                            <img width={110} src="./you_tube.png" />
+                            <img width={110} src={thumbnail} />
                         </div>
                         <div className='flex-1'>
                         <h6 className='text-[0.75rem] text-primaryOrange mb-2'>Social Media Tasks</h6>
-                        <h3 className='text-copyrightBlue font-[600] text-[1.3rem]'>Follow Tunslike on X</h3>
+                        <h3 className='text-copyrightBlue font-[600] text-[1.3rem]'>{taskName}</h3>
                         <div className='bg-[#f8d7db] w-[55%] px-3 py-1 text-[0.7rem] mt-2 border border-[#f5c6cc] flex items-center gap-x-1 rounded-[1rem] text-[#721c25]'>
                             <RiInformationLine className='text-[1rem]' /> Please do not unfollow this profile or account after you follow it
                         </div>
                         </div>
                         <div className='pr-7'>
+
                             {taskStart ? (
 
                                 <TaskTimer startTime="00:10:00" start={taskStart} endTime="00:00:00" />
@@ -207,10 +282,10 @@ const CompleteTask = () => {
                                 Read Description here
                             </a>
                         </div>
-                        <input type='text' value={socialMediaAccount} onChange={(e) => setSocialMediaAccount(e.target.value)} className='w-[70%] text-primaryBlue placeholder-[#a6a6a6] outline outline-[#e4e4e4] rounded-[0.7rem] my-2 p-3 text-[0.87rem]' placeholder='Enter facebook account you used to perform the task here' />
+                        <input type='text' value={socialMediaAccount} onChange={(e) => setSocialMediaAccount(e.target.value)} className='w-[70%] text-primaryBlue placeholder-[#a6a6a6] outline outline-[#e4e4e4] rounded-[0.7rem] my-2 p-3 text-[0.83rem]' placeholder='Enter facebook account you used to perform the task here' />
                         {(socialMediaAcctError) &&
                             <div className='flex items-center gap-x-1 mb-1'>
-                                <RiErrorWarningLine className='text-red-600'/> <p className='text-red-600 text-[0.77rem]'>Social media page/profile link name is required</p>
+                                <RiErrorWarningLine className='text-red-600'/> <p className='text-red-600 text-[0.77rem]'>Social media page/profile link name is required!</p>
                             </div>
                           }
                         </div>
@@ -233,6 +308,11 @@ const CompleteTask = () => {
                       onChange={handleFileChange} 
                       className='w-[70%] text-primaryBlue placeholder-[#a6a6a6] outline outline-[#e4e4e4] rounded-[0.7rem] my-2 p-3 text-[0.87rem]' />
 
+                      {(fileError) &&
+                        <div className='flex items-center gap-x-1 mb-1'>
+                            <RiErrorWarningLine className='text-red-600'/> <p className='text-red-600 text-[0.77rem]'>Upload proof of work is required!</p>
+                        </div>
+                      }
                         </div>
                           }
 
@@ -249,10 +329,7 @@ const CompleteTask = () => {
                 </div>
 
                 {taskStart &&
-
-                                 <button onClick={submitCompletedTask}>Complete Task</button>
-                                 
-
+                    <button className='flex items-center gap-x-2' onClick={submitCompletedTask}>Complete Task <FaCheck /></button>
                 }
 
    

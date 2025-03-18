@@ -1,5 +1,6 @@
 import React from "react";
 import { SlUser } from "react-icons/sl";
+import { Tooltip } from 'react-tooltip';
 
 const ProfileIcon = () => {
   return (

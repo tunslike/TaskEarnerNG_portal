@@ -6,8 +6,6 @@ const ProtectedRoute = () => {
 
   const { user } = useAuth();
 
-  console.log('I am firing inside protected routes: ' + user)
-
   // If user is not authenticated, redirect to login page
   if (!user) {
     return <Navigate to="/login" replace />;

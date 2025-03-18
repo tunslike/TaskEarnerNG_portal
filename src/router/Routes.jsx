@@ -12,7 +12,7 @@ import { Dashboard,
          CompleteTask,
          Login, Register
         } from "../pages";
-import { Account, Orders } from "../pages/Account";
+import { Account, ManageProfile, Orders } from "../pages/Account";
 import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
@@ -20,9 +20,8 @@ const AppRoutes = () => {
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/home" element={<Dashboard />} />
             <Route element={<ProtectedRoute />}>
-         
+                <Route path="/home" element={<Dashboard />} />
                 <Route path="/create-engagement" element={<CreateEngagement />} />
                 <Route path="/Profile" element={<Profile />} />
                 <Route path="/advertise" element={<Advertise />} />
@@ -34,6 +33,7 @@ const AppRoutes = () => {
                 <Route path="/complete-task" element={<CompleteTask />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/orders" element={<Orders />} />
+                <Route path="/manageProfile" element={<ManageProfile />} />
             </Route> 
             <Route path="*" element={<Login />} />
         </Routes>

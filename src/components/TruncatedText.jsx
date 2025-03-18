@@ -10,7 +10,7 @@ const TruncatedText = ({ text = 'This is a default text, all tasks must come wit
     }
   
     // Otherwise, truncate and add ellipsis
-    const truncated = text.substring(0, maxLength) + '...';
+    const truncated = text.substring(0, maxLength) + ' ...';
     return <span>{truncated}</span>;
   };
 
