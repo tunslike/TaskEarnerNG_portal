@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { loginSubscriber, registerSubcriber } from "../services/SubscriberService";
+import { loginSubscriber, logoutSubscriberBackend, registerSubcriber } from "../services/SubscriberService";
 import { useDispatch } from "react-redux";
-import { updateSubscriberData } from "../store/subscriberSlice";
+import { updateSubscriberData, logoutSubscriber } from "../store/subscriberSlice";
+import { persistor } from '../store/store';
 
 const AuthContext = createContext();
 
@@ -12,6 +13,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(localStorage.getItem("token") || null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [subscriberId, setSubscriberId] = useState('');
+
+  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
+
 
 
   const login = async (credentials) => {
@@ -25,8 +29,10 @@ export const AuthProvider = ({ children }) => {
         dispatch(updateSubscriberData(response));
 
         const authToken = response.token;
+        const refreshToken = response.refreshToken;
 
         localStorage.setItem("token", authToken);
+        localStorage.setItem('pass', refreshToken);
 
         setSubscriberId(response.subscriberId);
 
@@ -43,12 +49,14 @@ export const AuthProvider = ({ children }) => {
 
   };
 
+
+  // register new subscriber
   const register = async (userData) => {
 
     try {
 
-      await registerSubcriber(userData);
-      return true;
+      const response = await registerSubcriber(userData);
+      return response;
 
     } catch (error) {
       console.error("Registration failed", error);
@@ -56,13 +64,33 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
-    setUser(null);
-    delete axios.defaults.headers.common["Authorization"];
+
+  // LOGOUT FUNCTION
+  const logout = async () => {
+
+    try {
+
+      //logout function 
+      const response = await logoutSubscriberBackend();
+
+      dispatch(logoutSubscriber());
+      persistor.purge();
+   
+      // local storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("pass");
+
+      setToken(null);
+      setUser(null);
+
+      delete axios.defaults.headers.common["Authorization"];
+
+    }catch(error) {
+      console.error('Unable to logout subcriber: ', error);
+    }
   };
 
+  // return
   return (
     <AuthContext.Provider value={{ user, subscriberId, login, register, logout }}>
       {children}

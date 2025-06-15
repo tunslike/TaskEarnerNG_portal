@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Header, SideBar, BackButton, ProgressBar, SearchSelect, TruncatedText} from '../../components';
+import { Header, SideBar, BackButton, ProgressBar, SearchSelect, Footer, TruncatedText} from '../../components';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
@@ -12,7 +12,9 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import {format} from "date-fns"
 import Swal from 'sweetalert2';
-import { updateSubscriberProfile } from '../../services/SubscriberService';
+import { useDispatch } from "react-redux";
+import { fetchSubscriberProfile, updateSubscriberAccount, updateSubscriberProfileDetails } from '../../services/SubscriberService';
+import {updateSubscriberProfile, } from '../../store/subscriberSlice'
 
 
 const profileValidation = Yup.object({
@@ -27,6 +29,7 @@ const ManageProfile = () => {
 
     // states
     const subscriberData = useSelector((state) => state.subscriber.subscriberData)
+    const dispatch = useDispatch();
 
     const [dob, setDob] = useState("");
     const [loading, setLoading] = useState(false);
@@ -123,8 +126,8 @@ const ManageProfile = () => {
     }
 }
 
-        // process to update account details
-        const processUpdateAccountDetails = async (details) => {
+    // process to update account details
+    const processUpdateAccountDetails = async (details) => {
 
              // data
         const data = {
@@ -136,23 +139,20 @@ const ManageProfile = () => {
 
         try {
 
-            //const response = await updateSubscriberProfile(data);
-            axios.post('http://localhost:9190/api/v1/subscribers/updateAccountDetails', data)
-            .then((response) => {
+            setLoading(true);
 
-                setLoading(false);
+            const response = await updateSubscriberAccount(data);
 
-                if(response.data != null) {
-                    Swal.fire({
-                        title: "Bank Account Details!",
-                        text: "Your account details have been saved!",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                      });
-                }
+            if(response != null) {
+                Swal.fire({
+                    title: "Bank Account Details!",
+                    text: "Your account details have been updated successfully",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                  });
+            }
 
-            });
-            
+            setLoading(false);
          
             }catch(e) {
                 setLoading(false);
@@ -183,23 +183,23 @@ const ManageProfile = () => {
 
         try {
 
-            //const response = await updateSubscriberProfile(data);
-            axios.post('http://localhost:9190/api/v1/subscribers/updateAccountDetails', data)
-            .then((response) => {
+            setLoading(true)
 
-                if(response.data != null) {
-                    Swal.fire({
-                        title: "Bank Account Details!",
-                        text: "Your account details have been successfully",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                      });
-                }
+            const response = await updateSubscriberProfile(data);
 
-            });
-            
-         
+            setLoading(false);
+
+            if(response != null) {
+                Swal.fire({
+                    title: "Profile Update!",
+                    text: "Your profile has been updated successfully",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                  });
+            }
+                     
         }catch(e) {
+            setLoading(false);
             console.error(e.message);
         }
       }
@@ -227,46 +227,53 @@ const ManageProfile = () => {
           });
     }
 
+    // fetch profile details
+    const fetchSubscriberProfileDetails = async () => {
+        try {
+
+            setBankName('');
+            setLoading(true);
+
+            const response = await fetchSubscriberProfile(subscriberData.subscriberId);
+
+            setLoading(false);
+
+            dispatch(updateSubscriberProfile(response));
+            setProfile(response);
+            setBankName(response.bankName);
+            setLocation(response.location);
+            setReligion(response.religion);
+            setDob(response.birthday);
+            setGender(response.gender);
+
+            setInitialValues({
+                fname: response.firstName || "",
+                lname: response.lastName || "",
+                u_email: response.emailAddress || "",
+                u_phone: response.mobileNumber || "",
+              });
+
+        }catch(error) {
+            setLoading(false);
+            console.error(error)
+        }
+    }
+
     // useEffect
     useEffect(() => {
 
-        setBankName('');
-
-        setLoading(true);
-      
-        axios.get(`http://localhost:9190/api/v1/subscribers/fetchProfile?subscriberId=${subscriberData.subscriberId}`)
-  
-          .then((response) => {
-
-            setLoading(false);
-
-            setProfile(response.data);
-            setBankName(response.data.bankName);
-            setLocation(response.data.location);
-            setReligion(response.data.religion);
-            setDob(response.data.birthday);
-            setGender(response.data.gender);
-
-            setInitialValues({
-                fname: response.data.firstName || "",
-                lname: response.data.lastName || "",
-                u_email: response.data.emailAddress || "",
-                u_phone: response.data.mobileNumber || "",
-              });
+        // fetch profile
+        fetchSubscriberProfileDetails();
     
-          })
-          .catch((error) => {
-            setLoading(false);
-            console.error('Error fetching data:', error);
-          });
     }, []); 
+
 
 // return 
   return (
     <>
     <ProgressBar loading={loading} />
     <div className='md:max-w-[1250px] mx-auto my-6 mb-10'>
-    <Header />
+    <Header active="home" />
 
     <div className="flex md:max-w-[1150px] mx-auto gap-x-8 mt-[8rem]">
 
@@ -452,6 +459,7 @@ const ManageProfile = () => {
   </div>
 
   </div>
+  <Footer />
   </>
   )
 }

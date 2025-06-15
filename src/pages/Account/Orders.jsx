@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Header, SideBar, BackButton, ProgressBar } from '../../components';
+import { Header, SideBar, BackButton, ProgressBar, Footer } from '../../components';
 import { Link } from 'react-router-dom'
 import { GoInfo } from "react-icons/go";
 import { BsBasket3 } from "react-icons/bs";
@@ -32,13 +32,13 @@ const Orders = () => {
     // fetch data
     useEffect(() => {
       loadSubscribedTaskData();
-    }, []);
+    },[]);
   
   return (
     <>
     <ProgressBar loading={loading} />
     <div className='md:max-w-[1250px] mx-auto my-6 mb-10'>
-    <Header />
+    <Header active="home" />
 
     <div className="flex md:max-w-[1150px] mx-auto gap-x-8 mt-[8rem]">
 
@@ -56,7 +56,7 @@ const Orders = () => {
 
           <div className='mb-4 -mt-6'>
               
-              <BackButton />
+              <BackButton to="/account" />
 
               <div className='flex gap-x-2 items-center'>
                 <BsBasket3 className='text-primaryOrange text-[1.3rem]'/>
@@ -165,6 +165,7 @@ const Orders = () => {
   </div>
 
   </div>
+  <Footer />
   </>
   )
 }

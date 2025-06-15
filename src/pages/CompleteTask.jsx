@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Header, TaskTimer, BackButton } from '../components'
+import { Header, TaskTimer, BackButton, Footer } from '../components'
 import { FaTasks } from "react-icons/fa";
 import { RiInformationLine } from "react-icons/ri";
 import { LuExternalLink } from "react-icons/lu";
@@ -184,6 +184,7 @@ const CompleteTask = () => {
       };
 
     return (
+        <>
         <div className='md:max-w-[1250px] mx-auto my-6 mb-10'>
             <Header />
             <div className='mt-[85px] ml-[70px] mb-[10px]'>
@@ -339,7 +340,9 @@ const CompleteTask = () => {
             </div>
 
 
-        </div>     
+        </div>  
+        <Footer />
+        </>   
   )
 }
 

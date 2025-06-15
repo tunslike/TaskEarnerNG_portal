@@ -10,8 +10,10 @@ import CreateEngagement from "./CreateEngagement";
 import CompleteTask from "./CompleteTask";
 import Login from "./Login";
 import Register from "./Register";
+import VerifyEmail from "./verifyEmail";
 
 export {
+    VerifyEmail,
     Login,
     Register,
     CreateEngagement,

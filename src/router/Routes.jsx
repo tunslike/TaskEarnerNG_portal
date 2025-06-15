@@ -10,9 +10,10 @@ import { Dashboard,
          CreateAdvert,
          CreateEngagement,
          CompleteTask,
-         Login, Register
+         Login, Register,
+         VerifyEmail
         } from "../pages";
-import { Account, ManageProfile, Orders } from "../pages/Account";
+import { Account, Earnings, ManageProfile, ManageTasks, Orders, Withdrawals } from "../pages/Account";
 import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
@@ -20,6 +21,7 @@ const AppRoutes = () => {
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/account-verification" element={<VerifyEmail />} />
             <Route element={<ProtectedRoute />}>
                 <Route path="/home" element={<Dashboard />} />
                 <Route path="/create-engagement" element={<CreateEngagement />} />
@@ -34,6 +36,9 @@ const AppRoutes = () => {
                 <Route path="/account" element={<Account />} />
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/manageProfile" element={<ManageProfile />} />
+                <Route path="/earnings" element={<Earnings />} />
+                <Route path="/withdrawal" element={<Withdrawals />} />
+                <Route path="/manage-tasks" element={<ManageTasks />} />
             </Route> 
             <Route path="*" element={<Login />} />
         </Routes>

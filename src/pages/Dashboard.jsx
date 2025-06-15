@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react'
 import Slider from "react-slick";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { loadTaskSession } from '../services/TasksService';
-import { Header, Footer, Account, AdvertArea, AllTasks, RenderTasks, CardSlider } from '../components';
+import { loadTaskSession, fetchTasks } from '../services/TasksService';
+import { Header, Footer, Account, AdvertArea, AllTasks, RenderTasks, CardSlider, ProgressBar } from '../components';
 
 
 const Dashboard = () => {
@@ -11,59 +11,67 @@ const Dashboard = () => {
     const subscriberData = useSelector((state) => state.subscriber.subscriberData)
     const [tasks, setTasks] = useState([]);
     const [taskSession, setTaskSession] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    console.log('subscriber data = ' + subscriberData)
-
+    
+// load saved task session
     const loadSaveTaskSession = async () => {
 
       try {
 
+        setLoading(true);
+
         const response = await loadTaskSession(subscriberData.subscriberId);
 
+        setLoading(false);
+
         setTaskSession(response)
-        console.log(taskSession)
+    
         
       }catch(e) {
-        setIsLoading(false);
+        setLoading(false);
         alert(e + e.message);
       }
 
     }
 
+    // fetch all tasks
+    const fetchAllDashboardTasks = async () => {
+     
+        try {
 
+          setLoading(true)
+
+          const response = await fetchTasks(0);
+          setTasks(response);
+
+          setLoading(false)
+
+        }catch(e) {     
+          setLoading(false)
+          console.error(e + e.message);
+        }
+    }
+
+    // use effect
     useEffect(() => {
 
       loadSaveTaskSession();
+      fetchAllDashboardTasks()
 
     }, [])
 
-    useEffect(() => {
-      
-      axios.get('http://localhost:9192/api/v1/tasks/fetchAllTasks?status=0')
-
-        .then((response) => {
-
-          setTasks(response.data);
-  
-
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
-    }, []); // Empty dependency array ensures one-time execution
-
 
     const SocialTasks = tasks.filter((task) => task.taskCategory === 'Social');
-
     const WatchTasks = tasks.filter((task) => task.taskCategory === 'Watch');
 
-
-    
+    console.log(SocialTasks)
 
   return (
     <>
+    <ProgressBar loading={loading} />
       <div className='md:max-w-[1250px] mx-auto my-6 mb-10'>
-            <Header />
+            <Header active="home" />
             <Account />
             <AdvertArea />
 
@@ -78,13 +86,13 @@ const Dashboard = () => {
             }
 
             {/* render social media task */}
-            <RenderTasks type={0} tasks={SocialTasks} title="Social Media Tasks" />
+            <RenderTasks type={0} tasks={SocialTasks} promotion={true} title="Social Media Tasks" />
 
             {/* render watch & earn task */}
             <RenderTasks type={0} tasks={WatchTasks} title="Watch & Earn" />
 
             {/* render quick task */}
-            <RenderTasks type={0} tasks={tasks} title="Quick Tasks" />
+            <RenderTasks type={0} tasks={tasks} promotion={true}  title="Quick Tasks" />
       
             <AllTasks />
       </div>

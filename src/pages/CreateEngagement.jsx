@@ -207,7 +207,7 @@ const CreateEngagement = () => {
   return (
     <>
     <div className='md:max-w-[1250px] mx-auto my-6 mb-10'>
-          <Header />
+          <Header active="advertise" />
 
           <div className='mt-[85px] ml-[70px] mb-[10px]'>
           <BackButton />

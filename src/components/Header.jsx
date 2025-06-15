@@ -7,24 +7,20 @@ import { TbLogout } from "react-icons/tb";
 import { Link } from 'react-router-dom'
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
-import { persistor } from '../store/store';
-import { useDispatch } from 'react-redux';
 import { logoutSubscriber } from '../store/subscriberSlice';
 import Swal from 'sweetalert2';
 
-const Header = () => {
+const Header = ({active}) => {
 
-  const { user } = useAuth();
+  const { logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    dispatch(logoutSubscriber());
-    persistor.purge();
-    localStorage.removeItem('token');
-    navigate('/login')
+  const handleLogout = async () => {
+
+      // logout user
+      const response = await logout();
+      navigate('/login')
   }
 
   // prompt complete task
@@ -57,12 +53,12 @@ const Header = () => {
       <img src="" alt="Task Earner Logo" />
       <ul className="hidden md:flex gap-4 font-[400] text-[0.9rem] text-[#202b45]">
 
-        <Link className="bg-[#ffffff] px-4 py-2 shadow-sm text-[#fa501b] font-600 rounded-[1rem]" to="/home">Earn</Link>
-        <Link className="nav-link" to="/advertise">Advertise</Link>
-        <Link className="nav-link" to="/sellout">Sell Out</Link>
-        <Link className="nav-link" to="/leaderboard">Leaderboard</Link>
-        <Link className="nav-link" to="/referrals">Referrals</Link>
-        <Link className="nav-link" to="/support">Support</Link> 
+        <Link className={(active == 'home') ? `bg-[#ffffff] px-4 py-2 shadow-sm text-[#fa501b] font-600 rounded-[1rem]` : `nav-link`} to="/home">Earn</Link>
+        <Link className={(active == 'advertise') ? `bg-[#ffffff] px-4 py-2 shadow-sm text-[#fa501b] font-600 rounded-[1rem]` : `nav-link`} to="/create-advert">Advertise</Link>
+        <Link className={(active == 'sellout') ? `bg-[#ffffff] px-4 py-2 shadow-sm text-[#fa501b] font-600 rounded-[1rem]` : `nav-link`} to="/sellout">Sell Out</Link>
+        <Link className={(active == 'leaderboard')? `bg-[#ffffff] px-4 py-2 shadow-sm text-[#fa501b] font-600 rounded-[1rem]` : "nav-link"} to="/leaderboard">Leaderboard</Link>
+        <Link className={(active == 'referrals') ? `bg-[#ffffff] px-4 py-2 shadow-sm text-[#fa501b] font-600 rounded-[1rem]` : `nav-link`} to="/referrals">Referrals</Link>
+        <Link className={(active == 'support') ? `bg-[#ffffff] px-4 py-2 shadow-sm text-[#fa501b] font-600 rounded-[1rem]`:`nav-link`} to="/support">Support</Link> 
 
        {/** 
           <a href="#Header" className="bg-[#ffffff] px-4 py-2 shadow-sm text-[#fa501b] font-600 rounded-[1rem]">Earn</a>

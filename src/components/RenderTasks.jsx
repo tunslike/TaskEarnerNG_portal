@@ -3,6 +3,8 @@ import {ListCard} from '../components'
 import { FaArrowRightLong } from "react-icons/fa6";
 import { IoChevronBack } from "react-icons/io5";
 import { IoChevronForward } from "react-icons/io5";
+import { useSelector } from 'react-redux';
+import { IoNotifications } from "react-icons/io5";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -30,8 +32,12 @@ import "slick-carousel/slick/slick-theme.css";
   );
   
 
-const RenderTasks = ({ tasks, title, type }) => {
+const RenderTasks = ({ tasks, title, type, promotion }) => {
 
+  const subscriberData = useSelector((state) => state.subscriber.subscriberData)
+
+  const totalPrice = tasks.reduce((sum, item) => sum + item.taskPrice, 0);
+  const formattedTotal = `₦${totalPrice.toLocaleString()}`;
 
   const settings = {
     speed: 500,
@@ -72,6 +78,21 @@ const RenderTasks = ({ tasks, title, type }) => {
     </div>
 
 
+    {(promotion) &&
+      <div className="bg-white w-full rounded-[1.5rem] p-3 shadow-sm mb-3 flex items-center justify-start gap-x-4">
+          <div className="bg-[#f5f6f6] p-3 rounded-[1.4rem]">
+            <IoNotifications className="text-[2.2rem] text-red-600"/>
+          </div>
+          
+          <div>
+              <h5 className="text-primaryBlue text-[1.1rem] font-[500]">Complete all and Earn <span className="bg-green-500 ml-2 rounded-xl text-white px-[15px] py-[2px]">{formattedTotal}</span></h5>
+              {/*<p className="text-primaryOrange text-[0.8rem]">16 Tasks loaded</p>*/}
+          </div>
+      </div>
+    }
+
+  
+
      <div className="bg-white w-full rounded-[1.5rem] p-5 shadow-sm">
 
   <Slider {...settings} className="flex justify-start">
@@ -85,6 +106,7 @@ const RenderTasks = ({ tasks, title, type }) => {
         icon={task.taskIcon}
         thumbnail={task.taskThumbnail}
         price={task.taskPrice}
+        activeStatus={subscriberData.subscription}
         desc={task.captionMessage}
       />
     ))}

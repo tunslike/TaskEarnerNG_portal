@@ -24,6 +24,25 @@ export const fetchTaskTypes = async () => {
   return response.data;
 };
 
+// fetch task types 
+export const fetchEarningBalance = async (subscriberId) => {
+  const response = await taskApi.get(`/tasks/fetchEarnings?subscriberId=${subscriberId}`);
+  return response.data;
+};
+
+// fetch task withdrawals
+export const fetchWithdrawalPayment = async (subscriberId) => {
+  const response = await taskApi.get(`/tasks/fetchWithdrawals?subscriberId=${subscriberId}`);
+  return response.data;
+};
+
+// submit withdrawal request
+export const submitWithdrawlRequest = async (data) => {
+  const response = await taskApi.post('/tasks/saveWithdrawal', data);
+  return response.data;
+};
+
+
 // fetch search text 
 export const fetchSearchText = async (searchText) => {
   const response = await taskApi.get(`/tasks/fetchSearchTasks?searchText=${searchText}`);
@@ -39,6 +58,12 @@ export const loadCompletedTask = async (subscriberId) => {
 // fetch subscriber completed tasks
 export const loadSubscribedTask = async (subscriberId) => {
   const response = await taskApi.get(`/tasks/loadSubscribedTasks?subscriberId=${subscriberId}`);
+  return response.data;
+}
+
+// fetch task earnings and payments
+export const loadTaskPayments = async (subscriberId) => {
+  const response = await taskApi.get(`/tasks/fetchTaskEarnings?subscriberId=${subscriberId}`);
   return response.data;
 }
 

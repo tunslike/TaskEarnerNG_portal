@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Preloader } from '../components';
+import { Preloader, Footer } from '../components';
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import { TiUser } from "react-icons/ti";
@@ -12,11 +12,17 @@ import { FiEye } from "react-icons/fi";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { useAuth } from '../context/AuthContext';
 import { BiSolidErrorCircle } from "react-icons/bi";
+import { useSelector } from 'react-redux';
+import { useDispatch } from "react-redux";
+import { updateClientIPAddress } from "../store/subscriberSlice";
 
 const Login = () => {
 
     const { login } = useAuth();
     const navigate = useNavigate();
+    const [isExpired, setIsExpired] = useState(localStorage?.getItem('is_expired'))
+
+    const clientIPAddress = useSelector((state) => state.subscriber.clientIpAddress)
 
     const [showPassword, setShowPassword] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -32,10 +38,11 @@ const Login = () => {
 
         const success = await login(values);
 
-        if (success) navigate("/home");
+        if (success) navigate("/dashboard");
 
         setSubmitting(false);
         setIsError(true);
+
       };
     
 
@@ -66,7 +73,7 @@ const Login = () => {
         
     </nav>
 </header>
-<main className='flex justify-center -mt-10 items-center h-[100vh]'>
+<main className='flex justify-center -mt-10 items-center h-[80vh]'>
 
     <div className='w-[30%] shadow-lg mx-auto py-10 px-5 border-b border-[#ffffff] bg-white rounded-[1.3rem]'>
         <h1 className='font-[500] text-copyrightBlue text-center text-[1.1rem] flex items-center gap-x-[2px] justify-center'>Log in to Account <TiUser className='text-primaryOrange text-[1.2rem]' /></h1>
@@ -82,8 +89,12 @@ const Login = () => {
 
         <div className='mt-[40px]'>
 
+        {isExpired && 
+            <div className='text-center mb-3 bg-[#daedf7] p-3 rounded-lg text-[#31718f] border border-[#bde8f1] flex items-center gap-x-2 text-[0.8rem]'><BiSolidErrorCircle className='text-[1.1rem]' /> Session Expired! Kindly login again</div>
+        }
+        
         {isError && 
-            <div className='text-center mb-3 text-red-600 flex items-center gap-x-2 text-[0.8rem]'><BiSolidErrorCircle className='text-[1.1rem]' />     Incorrect username or password!</div>
+            <div className='text-center mb-3 bg-[#f8d7db] p-3 rounded-lg text-[#721c25] border border-[#f5c6cc] flex items-center gap-x-2 text-[0.8rem]'><BiSolidErrorCircle className='text-[1.1rem]' />     Incorrect username or password!</div>
         }
 
         <Form>
@@ -140,6 +151,7 @@ const Login = () => {
         </Formik>
     </div>            
 </main>
+<Footer />
 </>
   )
 }

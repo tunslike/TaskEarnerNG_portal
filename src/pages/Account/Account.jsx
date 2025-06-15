@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { Header, SideBar, ProgressBar } from '../../components';
+import { Header, SideBar, ProgressBar, Footer } from '../../components';
 import { RxDashboard } from "react-icons/rx";
 import { GoInfo } from "react-icons/go";
 import { FaTasks } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
+import { loadCompletedTask } from '../../services/TasksService';
 
 
 const Account = () => {
@@ -15,24 +16,31 @@ const Account = () => {
   const [loading, setLoading] = useState(false);
 
 
+  // load completed tasks
+  const loadSubscriberCompletedTask = async () => {
+    
+    try {
+
+      setLoading(true)
+      const response = await loadCompletedTask(subscriberData.subscriberId);
+
+      setLoading(false)
+
+      setCompletedTasks(response)
+
+    }catch(error) {
+      setLoading(false)
+      console.log(error)
+    }
+
+  }
+
+
   // fetch data
   useEffect(() => {
 
-    setLoading(true)
-      
-    axios.get(`http://localhost:9192/api/v1/tasks/loadCompletedTasks?subscriberId=${subscriberData.subscriberId}`)
-
-      .then((response) => {
-
-        setLoading(false)
-
-        setCompletedTasks(response.data)
-
-      })
-      .catch((error) => {
-        setLoading(false)
-        console.error('Error fetching data:', error);
-      });
+    loadSubscriberCompletedTask();
+    
   }, []); 
 
 
@@ -41,7 +49,7 @@ const Account = () => {
     <>
       <ProgressBar loading={loading} />
       <div className='md:max-w-[1250px] mx-auto my-6 mb-10'>
-      <Header />
+      <Header active="home" />
 
       <div className="flex md:max-w-[1150px] mx-auto gap-x-8 mt-[8rem]">
 
@@ -160,6 +168,7 @@ const Account = () => {
     </div>
 
     </div>
+    <Footer />
     </>
   )
 }

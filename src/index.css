@@ -40,6 +40,26 @@ body {
   @apply bg-[#fff] mx-auto pt-7 w-[90%] shadow-sm rounded-[1rem] mt-6;
 }
 
+.referral-div {
+  @apply shadow-sm rounded-[1rem] bg-[#fff] p-7
+}
+
+.referral-div h1 {
+  @apply text-[1.7rem] font-[600] text-primaryBlue
+}
+
+.ref-list {
+  @apply bg-[#f6f6f6] text-primaryOrange py-2 px-[21px] rounded-[1rem] mr-5 font-[600] text-[1.1rem];
+}
+
+.leadboard-div {
+  @apply shadow-sm rounded-[1rem] bg-[#fff] p-7
+}
+
+.leadboard-div h4 {
+  @apply text-[0.83rem] ml-3 font-[500];
+}
+
 .inner-body h4 {
   @apply text-[0.83rem] ml-3 text-[#4d4e50] font-[500];
 }
@@ -211,7 +231,7 @@ body {
 }
 
 .table-col-task {
-  @apply px-6 py-2 text-[0.70rem] font-[400];
+  @apply px-6 py-2 text-[0.7rem] font-[400];
 }
 
 .profile-field-row {
@@ -222,6 +242,36 @@ body {
   @apply w-[350px] text-primaryBlue placeholder-[#a6a6a6] outline outline-[#e4e4e4] rounded-[0.7rem] p-3 text-[0.87rem];
 }
 
+.withdrawal-input-style {
+  @apply w-[265px] text-primaryBlue placeholder-[#a6a6a6] outline outline-[#e4e4e4] rounded-[0.7rem] p-3 text-[0.87rem];
+}
+
 .profile-label-style {
   @apply text-[0.83rem] mt-2 mb-1 ml-2 text-[#a7a7a7];
+}
+
+
+.active-body-list li {
+  @apply text-gray-600 mt-3 text-[0.78rem]
+}
+
+
+.leader-amt {
+  @apply border border-primaryOrange text-primaryOrange px-3 py-[2px] text-[0.75rem] rounded-[1.5rem] font-[500];
+}
+
+.help-div {
+  @apply flex items-center flex-wrap justify-start gap-8 ml-6 mt-5;
+}
+
+.help-box {
+  @apply bg-white w-[31%] rounded-[1rem] border-b-2 p-8 shadow-sm cursor-pointer hover:shadow-lg hover:border-b-2 hover:border-primaryOrange;
+}
+
+.help-box p {
+  @apply text-[0.88rem] text-[#6f6f72] mt-2;
+}
+
+.help-box h2 {
+  @apply text-[1.1rem] text-primaryBlue font-[500]
 }
